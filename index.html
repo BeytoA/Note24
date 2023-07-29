@@ -1,8 +1,21 @@
 <html>
   <head>
     <title>Index Page</title>
+    <script src="data.js"></script>
+    <style>
+      textarea {
+        width: 400px;
+        height: 150px;
+      }
+    </style>
   </head>
   <body>
     <h1>Welcome to Note24!</h1>
+    <textarea id="logArea"></textarea>
+    <div>
+      <input id="noteTitle" type="text" value="" autocomplete="off"/><input type="button" value="Add Note" onclick="addNoteToDatabase()"/>
+    </div>
+    <h3>Note List</h3>
+    <div id="notesList">No notes yet</div>
   </body>
 </html>
