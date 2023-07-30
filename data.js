@@ -1,5 +1,3 @@
-document.addEventListener("DOMContentLoaded", loaded, false);
-
 const idbRequest = window.indexedDB.open("note24database", 2);
 var note24database = IDBDatabase;
 
@@ -42,9 +40,12 @@ function loaded() {
         };
     };
 }
+document.addEventListener("DOMContentLoaded", loaded, false);
 
 function addNoteToDatabase() {
     var noteTitle = document.getElementById("noteTitle").value;
+    if (noteTitle.length < 1) { alert("Type a note title, please"); return; }
+
     var noteContent = "";
     var noteDateCreated = "";
     var noteDateLastModified = noteDateCreated;
@@ -71,13 +72,14 @@ function addNoteToDatabase() {
 }
 
 function removeNoteFromDatabes(keyToRemove) {
-    const request = db
+    const request = note24database
         .transaction(["notes"], "readwrite")
         .objectStore("notes")
         .delete(keyToRemove);
         request.onsuccess = (event) => {
             logArea.innerHTML += "\nRemove note SUCCESS";
         };
+    getAllNotes(note24database);
 }
 
 function getAllNotes(db) {
@@ -92,7 +94,7 @@ function getAllNotes(db) {
         .openCursor();
 
     request.onerror = function(event) {
-        console.err("error fetching data");
+        logArea.innerHTML += "\nNote list FAILED";
     };
     notes = [];
     request.onsuccess = function(event) {
@@ -111,7 +113,6 @@ function getAllNotes(db) {
         }
     };
 
-
     /*
     note24database.transaction("notes").objectStore("notes").getAll().onsuccess = (event) => {
         updateNotesList(event.target.result);
@@ -119,9 +120,21 @@ function getAllNotes(db) {
     }
     */
 }
+
 function updateUInotesList(notes) {
-    console.log(notes);
-    notes.forEach((note) => {
-        notesList.innerHTML += "<div>"+ "id: " + note.dBkey + " " + "Title: " + note.title + "</div>";
-    });
+    logArea.innerHTML += "\nUpdating note list";
+    
+    if (notes.length > 0)
+    {
+        
+        notes.forEach((note) => {
+            const itemToAdd = document.querySelector("#noteitem").content.cloneNode(true);
+            let itemDiv = itemToAdd.querySelectorAll("div");
+            itemDiv[0].innerHTML = itemDiv[0].innerHTML
+            .replaceAll("${dBkey}", note.dBkey)
+            .replaceAll("${title}", note.title);
+            notesList.appendChild(itemToAdd);
+        });
+    }
+    else { notesList.innerHTML += "<div>There are no notes yet, press 'Add Note' to make one</div>"; }
 }

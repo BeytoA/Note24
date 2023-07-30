@@ -1,5 +1,6 @@
-<html>
+<!DOCTYPE html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index Page</title>
     <script src="data.js"></script>
     <style>
@@ -11,11 +12,18 @@
   </head>
   <body>
     <h1>Welcome to Note24!</h1>
-    <textarea id="logArea"></textarea>
     <div>
       <input id="noteTitle" type="text" value="" autocomplete="off"/><input type="button" value="Add Note" onclick="addNoteToDatabase()"/>
     </div>
     <h3>Note List</h3>
     <div id="notesList">No notes yet</div>
+
+    <h3>Log</h3>
+    <textarea id="logArea"></textarea>
+
+    <!--Templates-->
+    <template id="noteitem">
+      <div>id: ${dBkey} Title: ${title} <input type="button" value="Delete" onclick="removeNoteFromDatabes(${dBkey})"/></div>
+    </template>
   </body>
 </html>
