@@ -2,13 +2,7 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index Page</title>
-    <script src="data.js"></script>
-    <style>
-      textarea {
-        width: 400px;
-        height: 150px;
-      }
-    </style>
+    <link rel="stylesheet" href="defaultStyle.css">
   </head>
   <body>
     <h1>Welcome to Note24!</h1>
@@ -18,12 +12,18 @@
     <h3>Note List</h3>
     <div id="notesList">No notes yet</div>
 
+    <div class="ApplicationBar">
+      <div class="icons">
+        <input type="button" value="+"/>
+        <input type="button" value="D"/>
+      </div>
+    </div>
+
     <h3>Log</h3>
     <textarea id="logArea"></textarea>
 
-    <!--Templates-->
-    <template id="noteitem">
-      <div>id: ${dBkey} Title: ${title} <input type="button" value="Delete" onclick="removeNoteFromDatabes(${dBkey})"/></div>
-    </template>
+    <!--Workbench and Templates-->
+    <script src="data.js"></script>
+    <div id="noteitem" style="display: none;">id: ${dBkey} Title: ${title} Date Created: ${dateCreated} <input type="button" value="Delete" onclick="removeNoteFromDatabes(${dBkey})"/></div>
   </body>
 </html>

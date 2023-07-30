@@ -2,20 +2,22 @@ const idbRequest = window.indexedDB.open("note24database", 2);
 var note24database = IDBDatabase;
 
 function loaded() {
+    console.log("loaded fired");
     var logArea = document.getElementById("logArea");
+    logArea.innerHTML += "";
     
     
     idbRequest.onerror = (event) => {
-        logArea.innerHTML += "\nindexedDB open ERROR";
+        logArea.innerHTML += "indexedDB open ERROR\n";
     };
     idbRequest.onsuccess = (event) => {
-        logArea.innerHTML += "\nindexedDB open SUCCESS";
+        logArea.innerHTML += "indexedDB open SUCCESS\n";
         //console.log(event.target.result)
         note24database = event.target.result;
         
         if (note24database != null){
             note24database.onerror = (event) => {
-                logArea.innerHTML += "\nDatabase error: ${event.target.errorCode}";
+                logArea.innerHTML += "Database error: ${event.target.errorCode}\n";
             }
         }
 
@@ -23,7 +25,7 @@ function loaded() {
     
     };
     idbRequest.onupgradeneeded = (event) => {
-        logArea.innerHTML += "\nDatabase will be upgraded";
+        logArea.innerHTML += "Database will be upgraded\n";
     
         const bufferDB = event.target.result;
       
@@ -36,36 +38,42 @@ function loaded() {
         objectStore.createIndex("dateLastModified", "dateLastModified", { unique: false });
     
         objectStore.transaction.oncomplete = (event) => {
-            logArea.innerHTML += "\nCreate objectStore SUCCESS";
+            logArea.innerHTML += "Create objectStore SUCCESS\n";
         };
     };
 }
-document.addEventListener("DOMContentLoaded", loaded, false);
+//document.addEventListener("DOMContentLoaded", loaded, false);
+loaded();
+
 
 function addNoteToDatabase() {
-    var noteTitle = document.getElementById("noteTitle").value;
-    if (noteTitle.length < 1) { alert("Type a note title, please"); return; }
-
-    var noteContent = "";
-    var noteDateCreated = "";
-    var noteDateLastModified = noteDateCreated;
+    var todayDate = new Date();
+    var noteTitle = document.getElementById("noteTitle");
+    if (noteTitle.value.length < 1) { alert("Type a note title, please"); return; }
 
     const transaction = note24database.transaction(["notes"], "readwrite");
 
     transaction.oncomplete = (event) => {
-        logArea.innerHTML += "\nAdd note transaction SUCCESS";
+        logArea.innerHTML += "Add note transaction SUCCESS\n";
     };
     
     transaction.onerror = (event) => {
-        logArea.innerHTML += "\nAdd note transaction FAILED";
+        logArea.innerHTML += "Add note transaction FAILED\n";
     };
     
     const objectStore = transaction.objectStore("notes");
-    var note = { title: noteTitle, content: "Note content", dateCreated: "created date", dateLastModified: "last modified date"};
+    var note = { 
+        title: noteTitle.value,
+        content: "Note content",
+        dateCreated: todayDate.getDate() + "-" + (todayDate.getMonth() + 1) + "-" + todayDate.getFullYear() + " " + ("0" + (todayDate.getHours())).toString().slice(-2) + ":" + ("0" + (todayDate.getMinutes() + 1)).toString().slice(-2) + ":" + ("0" + (todayDate.getSeconds() + 1)).toString().slice(-2),
+        dateLastModified: ""
+    };
+    note.dateLastModified = note.dateCreated;
 
     const request = objectStore.add(note);
     request.onsuccess = (event) => {
-        logArea.innerHTML += "\nNote add SUCCESS | key: " + event.target.result;
+        logArea.innerHTML += "Note add SUCCESS | key: " + event.target.result + "\n";
+        noteTitle.value = "";
 
         getAllNotes(note24database);
     };
@@ -77,15 +85,16 @@ function removeNoteFromDatabes(keyToRemove) {
         .objectStore("notes")
         .delete(keyToRemove);
         request.onsuccess = (event) => {
-            logArea.innerHTML += "\nRemove note SUCCESS";
+            logArea.innerHTML += "Remove note SUCCESS\n";
         };
     getAllNotes(note24database);
 }
 
+var notesList = document.createElement("div");
 function getAllNotes(db) {
 
     //List all notes
-    var notesList = document.getElementById("notesList");
+    notesList = document.getElementById("notesList");
     notesList.innerHTML = "";
     
     request = db
@@ -94,7 +103,7 @@ function getAllNotes(db) {
         .openCursor();
 
     request.onerror = function(event) {
-        logArea.innerHTML += "\nNote list FAILED";
+        logArea.innerHTML += "Note list FAILED\n";
     };
     notes = [];
     request.onsuccess = function(event) {
@@ -109,7 +118,7 @@ function getAllNotes(db) {
         else {
             //After cursor done
             updateUInotesList(notes);
-            logArea.innerHTML += "\nNote list SUCCESS";
+            logArea.innerHTML += "Note list SUCCESS\n";
         }
     };
 
@@ -122,18 +131,21 @@ function getAllNotes(db) {
 }
 
 function updateUInotesList(notes) {
-    logArea.innerHTML += "\nUpdating note list";
+    logArea.innerHTML += "Updating note list\n";
     
     if (notes.length > 0)
     {
-        
         notes.forEach((note) => {
-            const itemToAdd = document.querySelector("#noteitem").content.cloneNode(true);
-            let itemDiv = itemToAdd.querySelectorAll("div");
-            itemDiv[0].innerHTML = itemDiv[0].innerHTML
-            .replaceAll("${dBkey}", note.dBkey)
-            .replaceAll("${title}", note.title);
-            notesList.appendChild(itemToAdd);
+            logArea.innerHTML += "Adding item\n";
+            const noteitem = document.getElementById("noteitem");
+            let itemDivInner = noteitem.innerHTML;
+            itemDivInner = itemDivInner
+            .replace(/\${dBkey}/g, note.dBkey)
+            .replace(/\${title}/, note.title)
+            .replace(/\${dateCreated}/, note.dateCreated);
+            let itemDiv = document.createElement("div")
+            itemDiv.innerHTML = itemDivInner;
+            notesList.appendChild(itemDiv);
         });
     }
     else { notesList.innerHTML += "<div>There are no notes yet, press 'Add Note' to make one</div>"; }
