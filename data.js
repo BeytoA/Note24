@@ -79,14 +79,18 @@ function addNoteToDatabase() {
     };
 }
 
-function removeNoteFromDatabes(keyToRemove) {
-    const request = note24database
-        .transaction(["notes"], "readwrite")
-        .objectStore("notes")
-        .delete(keyToRemove);
-        request.onsuccess = (event) => {
-            logArea.innerHTML += "Remove note SUCCESS\n";
-        };
+function removeNotesFromDatabese(keysToRemove) {
+    console.log("removing note" + keysToRemove);
+    keysToRemove.forEach((keys) => {
+        const request = note24database
+            .transaction(["notes"], "readwrite")
+            .objectStore("notes")
+            .delete(keys);
+            request.onsuccess = (event) => {
+                console.log("removed note");
+                logArea.innerHTML += "Remove note SUCCESS\n";
+            };
+    });
     getAllNotes(note24database);
 }
 
@@ -137,16 +141,77 @@ function updateUInotesList(notes) {
     {
         notes.forEach((note) => {
             logArea.innerHTML += "Adding item\n";
+            let dateSplit = note.dateCreated.split(" ")[0].split("-");
+            
             const noteitem = document.getElementById("noteitem");
             let itemDivInner = noteitem.innerHTML;
             itemDivInner = itemDivInner
             .replace(/\${dBkey}/g, note.dBkey)
             .replace(/\${title}/, note.title)
-            .replace(/\${dateCreated}/, note.dateCreated);
-            let itemDiv = document.createElement("div")
+            .replace(/\${content}/, "(no content)")
+            .replace(/\${dateCreated}/, dateSplit[0] + "-" + dateSplit[1]);
+            let itemDiv = document.createElement("div");
             itemDiv.innerHTML = itemDivInner;
+            itemDiv.classList.add("noteItem");
             notesList.appendChild(itemDiv);
         });
     }
     else { notesList.innerHTML += "<div>There are no notes yet, press 'Add Note' to make one</div>"; }
+}
+
+function showCheckboxes(preSelect) {
+    notes = document.getElementById("notesList").children;
+    
+    for(i = 0; i < notes.length; i++) {
+        var titleWrapper = notes[i].children[2].children[0];
+        if (!titleWrapper.children[1].classList.contains("moveRight")){
+            titleWrapper.children[0].classList.remove("hidden"); //CheckBox
+            titleWrapper.children[1].classList.add("moveRight"); //titleDiv
+            titleWrapper.children[2].classList.add("moveRight"); //contentDiv
+
+            document.getElementById("addNoteButton").classList.add("hidden");
+            document.getElementById("checkDeleteButton").classList.remove("hidden");
+            if (preSelect == null) { document.getElementById("checkDeleteButton").classList.add("disabled"); }
+        }
+        else{
+            titleWrapper.children[0].classList.add("hidden"); //CheckBox
+            titleWrapper.children[1].classList.remove("moveRight"); //titleDiv
+            titleWrapper.children[2].classList.remove("moveRight"); //contentDiv
+
+            document.getElementById("addNoteButton").classList.remove("hidden");
+            document.getElementById("checkDeleteButton").classList.add("hidden");
+        }
+    }
+
+    //add code to preselect a checkbox
+}
+
+function checkDeleteButtonPressed() {
+    //add function to ask for permission
+    if (!document.getElementById("checkDeleteButton").classList.contains("disabled"))
+    {
+        notes = document.getElementById("notesList").children;
+        var notesToDelete = [];
+        
+        for(i = 0; i < notes.length; i++) {
+            var noteCheckbox = notes[i].children[2].children[0].children[0];
+            if (noteCheckbox.checked){
+                //alert("will remove:" + notes[i].children[0].value);
+                notesToDelete.push(parseInt(notes[i].children[0].value));
+            }
+        }
+    
+        showCheckboxes(null);
+        removeNotesFromDatabese(notesToDelete);
+    }
+}
+
+function clickedOnNote(toOpen) {
+    alert(toOpen.parentElement.children[2].children[0].children[1].innerHTML);
+}
+
+function checkBoxClicked() {
+    document.getElementById("checkDeleteButton").classList.remove("disabled");
+    
+    //add function to disable it again when no notes are selected
 }

@@ -14,8 +14,14 @@
 
     <div class="ApplicationBar">
       <div class="icons">
-        <input type="button" value="+"/>
-        <input type="button" value="D"/>
+        <input type="button" id="addNoteButton" value="&#x2b;"/>
+        <input type="button" id="checkButton" value="&#xf14a;" onclick="showCheckboxes(null)"/>
+        <input type="button" id="checkDeleteButton" class="hidden" value="&#xf2ed;" onclick="checkDeleteButtonPressed()"/>
+
+        <!--
+        <input type="button" value="&#xf005;"/>
+        <input type="button" value="&#xf004;"/>
+        <input type="button" value="&#xf14d;"/>-->
       </div>
     </div>
 
@@ -24,6 +30,25 @@
 
     <!--Workbench and Templates-->
     <script src="data.js"></script>
-    <div id="noteitem" style="display: none;">id: ${dBkey} Title: ${title} Date Created: ${dateCreated} <input type="button" value="Delete" onclick="removeNoteFromDatabes(${dBkey})"/></div>
+    <div id="noteitem" class="noteItem" style="display: none;">
+      <input type="hidden" value="${dBkey}" />
+      <div class="paddingDivLeft" onclick="showCheckboxes(this)"></div>
+      
+      <div class="dataDiv" onclick="clickedOnNote(this)">
+        <div class="titleWrapper">
+          <input type="checkbox" class="checkboxDiv hidden" onclick="checkBoxClicked()" />
+          <div class="titleDiv">
+            ${title}
+          </div>
+          <div class="contentDiv">
+            ${content}
+          </div>
+        </div>
+      </div>
+      <div class="dateCreated" onclick="clickedOnNote(this)">
+        ${dateCreated}
+      </div>
+      <div class="paddingDivRight"></div>
+    </div>
   </body>
 </html>
