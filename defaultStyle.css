@@ -22,12 +22,63 @@ body {
 }
 
 textarea {
-    width: 95%;
+    width: 90%;
     height: 150px;
     color: white;
     background-color: black;
-    margin-bottom: 55px;
+    margin: 0px 10px 100px 10px;
 }
+
+input[type=text] {
+    background: white;
+    border: none;
+    padding: 5px;
+    margin: 0px;
+}
+
+input[type=text]:focus {
+    background: white;
+    border: 1px solid green;
+}
+
+h1,h3,h4 {
+    margin: 5px 10px;
+}
+
+.newQuickNote {
+    position: fixed;
+    bottom: 48px;
+    display: table-row;
+    width: 100%;
+}
+
+    .newQuickNote .quickNoteTitle{
+        display: table-cell;
+        margin: 5px;
+    }
+
+    .newQuickNote .quickNoteAdd{
+        display: table-cell;
+        width: 1%;
+    }
+
+    .newQuickNote input[type=text] {
+        display: table-cell;
+        width: 100%;
+        font-size: 20px;
+    }
+
+    .newQuickNote input[type=button] {
+        display: table-cell;
+        background-color: black;
+        border: 2px solid white;
+        color: white;
+        font-size: 20px;
+    }
+
+    .newQuickNote input[type=button]:hover {
+        background-color: gray;
+    }
 
 .ApplicationBar {
     display: table;
@@ -82,6 +133,7 @@ textarea {
     .noteItem .dataDiv {
         display: table-cell;
         width: 100%;
+        padding: 10px 0px;
     }
 
     .noteItem .paddingDivLeft, .noteItem .paddingDivRight {

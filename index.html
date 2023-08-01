@@ -5,23 +5,26 @@
     <link rel="stylesheet" href="defaultStyle.css">
   </head>
   <body>
-    <h1>Welcome to Note24!</h1>
-    <div>
-      <input id="noteTitle" type="text" value="" autocomplete="off"/><input type="button" value="Add Note" onclick="addNoteToDatabase()"/>
-    </div>
-    <h3>Note List</h3>
+    <h4>Note24</h4>
+    <h1>quick view <span style="color: rgb(83, 83, 83);">advanced</span></h1>
     <div id="notesList">No notes yet</div>
 
+    <div class="newQuickNote">
+      <div class="quickNoteTitle"><input id="noteTitle" placeholder="Type note..." type="text" value="" autocomplete="off"/></div>
+      <div class="quickNoteAdd"><input type="button" value="Add Note" onclick="addNoteToDatabase()"/></div>
+    </div>
     <div class="ApplicationBar">
       <div class="icons">
-        <input type="button" id="addNoteButton" value="&#x2b;"/>
         <input type="button" id="checkButton" value="&#xf14a;" onclick="showCheckboxes(null)"/>
         <input type="button" id="checkDeleteButton" class="hidden" value="&#xf2ed;" onclick="checkDeleteButtonPressed()"/>
+        <input type="button" id="checkClipboardButton" class="hidden" value="&#xf328;" onclick="checkBoxClipboardClicked()"/>
 
         <!--
+        <input type="button" id="addNoteButton" value="&#x2b;"/>
         <input type="button" value="&#xf005;"/>
         <input type="button" value="&#xf004;"/>
-        <input type="button" value="&#xf14d;"/>-->
+        <input type="button" value="&#xf14d;"/>
+        -->
       </div>
     </div>
 
@@ -34,13 +37,13 @@
       <input type="hidden" value="${dBkey}" />
       <div class="paddingDivLeft" onclick="showCheckboxes(this)"></div>
       
-      <div class="dataDiv" onclick="clickedOnNote(this)">
+      <div class="dataDiv">
         <div class="titleWrapper">
           <input type="checkbox" class="checkboxDiv hidden" onclick="checkBoxClicked()" />
-          <div class="titleDiv">
+          <div class="titleDiv" onclick="clickedOnNote(this)">
             ${title}
           </div>
-          <div class="contentDiv">
+          <div class="contentDiv" onclick="clickedOnNote(this)">
             ${content}
           </div>
         </div>

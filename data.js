@@ -1,11 +1,9 @@
 const idbRequest = window.indexedDB.open("note24database", 2);
 var note24database = IDBDatabase;
+var logArea = document.getElementById("logArea");
 
 function loaded() {
-    console.log("loaded fired");
-    var logArea = document.getElementById("logArea");
     logArea.innerHTML += "";
-    
     
     idbRequest.onerror = (event) => {
         logArea.innerHTML += "indexedDB open ERROR\n";
@@ -49,7 +47,7 @@ loaded();
 function addNoteToDatabase() {
     var todayDate = new Date();
     var noteTitle = document.getElementById("noteTitle");
-    if (noteTitle.value.length < 1) { alert("Type a note title, please"); return; }
+    if (noteTitle.value.length < 1) { alert("Type a note title, please."); return; }
 
     const transaction = note24database.transaction(["notes"], "readwrite");
 
@@ -80,16 +78,15 @@ function addNoteToDatabase() {
 }
 
 function removeNotesFromDatabese(keysToRemove) {
-    console.log("removing note" + keysToRemove);
+    logArea.innerHTML += "Removing note(s): " + keysToRemove + "\n";
     keysToRemove.forEach((keys) => {
         const request = note24database
             .transaction(["notes"], "readwrite")
             .objectStore("notes")
             .delete(keys);
-            request.onsuccess = (event) => {
-                console.log("removed note");
-                logArea.innerHTML += "Remove note SUCCESS\n";
-            };
+        request.onsuccess = (event) => {
+            logArea.innerHTML += "Remove note SUCCESS\n";
+        };
     });
     getAllNotes(note24database);
 }
@@ -134,6 +131,26 @@ function getAllNotes(db) {
     */
 }
 
+function getNoteArray(noteIdArray, fn) {
+    logArea.innerHTML += "Getting a single note ATTEMPT\n";
+    var responseArray = [];
+
+    noteIdArray.forEach((noteId) => {
+        note24database
+            .transaction(["notes"], "readwrite")
+            .objectStore("notes")
+            .openCursor(parseInt(noteId)).onsuccess = async (event) => {
+                const cursor = event.target.result;
+                if (cursor){
+                    logArea.innerHTML += "Getting a single note SUCCESS\n";
+                    responseArray.push(cursor.value);
+                    cursor.continue();
+                }
+                else { fn(responseArray); }
+            };
+    });
+}
+
 function updateUInotesList(notes) {
     logArea.innerHTML += "Updating note list\n";
     
@@ -160,34 +177,47 @@ function updateUInotesList(notes) {
 }
 
 function showCheckboxes(preSelect) {
+    //Pre select the checkbox when available
+    if (preSelect != null)
+    {
+        preSelect.parentElement.children[2].children[0].children[0].checked = true;
+    }
+
+    //Get all notes on the screen
     notes = document.getElementById("notesList").children;
     
     for(i = 0; i < notes.length; i++) {
+
+        //Make space for checkboxes by moving note data to right
         var titleWrapper = notes[i].children[2].children[0];
         if (!titleWrapper.children[1].classList.contains("moveRight")){
             titleWrapper.children[0].classList.remove("hidden"); //CheckBox
             titleWrapper.children[1].classList.add("moveRight"); //titleDiv
             titleWrapper.children[2].classList.add("moveRight"); //contentDiv
 
-            document.getElementById("addNoteButton").classList.add("hidden");
             document.getElementById("checkDeleteButton").classList.remove("hidden");
-            if (preSelect == null) { document.getElementById("checkDeleteButton").classList.add("disabled"); }
+            document.getElementById("checkClipboardButton").classList.remove("hidden");
+            if (preSelect == null)
+            {
+                document.getElementById("checkDeleteButton").classList.add("disabled");
+                document.getElementById("checkClipboardButton").classList.add("disabled");
+            }
         }
         else{
             titleWrapper.children[0].classList.add("hidden"); //CheckBox
             titleWrapper.children[1].classList.remove("moveRight"); //titleDiv
             titleWrapper.children[2].classList.remove("moveRight"); //contentDiv
 
-            document.getElementById("addNoteButton").classList.remove("hidden");
             document.getElementById("checkDeleteButton").classList.add("hidden");
+            document.getElementById("checkClipboardButton").classList.add("hidden");
         }
     }
 
-    //add code to preselect a checkbox
+    //TODO: Add code to preselect a checkbox
 }
 
 function checkDeleteButtonPressed() {
-    //add function to ask for permission
+    //TODO: Add code to ask for permission
     if (!document.getElementById("checkDeleteButton").classList.contains("disabled"))
     {
         notes = document.getElementById("notesList").children;
@@ -206,12 +236,64 @@ function checkDeleteButtonPressed() {
     }
 }
 
+function showNote(note) {
+    alert(note[0].title);
+}
+
 function clickedOnNote(toOpen) {
-    alert(toOpen.parentElement.children[2].children[0].children[1].innerHTML);
+    var noteitem = toOpen.parentElement;
+    //Find note main div
+    if (!noteitem.classList.contains("noteItem")) { noteitem = noteitem.parentElement.parentElement; }
+    
+    var noteId = [ noteitem.children[0].value ];
+
+    getNoteArray(noteId, showNote);
 }
 
 function checkBoxClicked() {
     document.getElementById("checkDeleteButton").classList.remove("disabled");
+    document.getElementById("checkClipboardButton").classList.remove("disabled");
     
     //add function to disable it again when no notes are selected
+}
+
+async function copyToClipboard(toCopy)
+{
+    var toCopyClipboard = "";
+    for (i = 0; i < toCopy.length; i++)
+    {
+        toCopyClipboard += toCopy[i].title;
+        if (i < toCopy.length - 1) { toCopyClipboard += "\n"; }
+    }
+    try
+    {
+        await navigator.clipboard.writeText(toCopyClipboard);
+        logArea.innerHTML += "Note copied to clipboard\n";
+    }
+    catch (err)
+    {
+        logArea.innerHTML += "Failed to copy to clipboard: " + err;
+    }
+}
+
+function checkBoxClipboardClicked() {
+    //Check if button is enabled
+    if (!document.getElementById("checkClipboardButton").classList.contains("disabled"))
+    {
+        //Get list of all notes on the screen
+        notes = document.getElementById("notesList").children;
+        var notesToCopy = [];
+        
+        //Iterate through selected notes
+        for(i = 0; i < notes.length; i++) {
+            var noteCheckbox = notes[i].children[2].children[0].children[0];
+            
+            //Create an array with selected notes
+            if (noteCheckbox.checked) { notesToCopy.push(parseInt(notes[i].children[0].value)); }
+        }
+        if (notesToCopy.length < 1) { return; }
+    
+        showCheckboxes(null);
+        getNoteArray(notesToCopy, copyToClipboard);
+    }
 }
