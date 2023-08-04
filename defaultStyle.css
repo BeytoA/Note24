@@ -1,9 +1,11 @@
 html {
+    height: 100%;
     background-color: black;
     color: white;
 }
 
 body {
+    height: 100%;
     margin: 0px;
     font-family: "Open-Sans Regular";
 }
@@ -43,94 +45,168 @@ h1,h3,h4 {
 }
 
 .pageWrapper {
-    display: table;
+    display: flex;
+    flex-flow: column nowrap;
     height: 100%;
 }
 
-.pageFiller {
-    height: 200px;
+.pageContent {
+    flex: auto;
+    overflow: scroll;
+}
+
+.applicationBar {
+    flex: none;
+    background-color: #1f1f1f;
+    text-align: center;
+}
+
+.applicationBar .icons {
+    display: table;
+    margin: 0px auto;
+    height: 44px;
+}
+
+.applicationBar .icons input[type=button] {
+    font-family: "Font-Awesome Regular";
+    height: 34px;
+    width: 34px;
+    border-radius: 50%;
+    background-color: #1f1f1f;
+    color: white;
+    border: 2px solid white;
+    font-size: 18px;
+    text-align: center;
+    margin: 7px 15px;
+}
+
+.applicationBar .icons input[type=button]:hover {
+    background-color: #3f3f3f;
+}
+
+.applicationBar .hidden {
+    display: none;
+}
+
+.applicationBar .icons .disabled {
+    color: gray !important; 
+    border-color: gray !important;
+}
+
+.applicationBar .barMenu {
+    float: left;
+    width: 100%;
+    font-family: "Open-Sans Light";
+    font-size: 22px;
+    text-align: left;
+    max-height: 250px;
+    overflow: scroll;
+    transition: max-height 0.2s ease;
+}
+    .applicationBar .barMenu div {
+        margin: 10px 15px;
+    }
+
+    .applicationBar .closed {
+        max-height: 0px;
+    }
+
+.barMenuIcon {
+    display: table;
+    height: 42px;
+    padding-top: 6px;
+    margin-right: 12px;
+    margin-left: auto;
+    margin-bottom: -48px;
+    font-family: 'Font-Awesome Solid';
+    font-size: 4px;
+}
+
+    .barMenuIcon span {
+        margin: 0px 2px;
+    }
+
+/*
+QUICK VIEW STYLE
+*/
+
+.content {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
 }
 
 .pageTitles {
-    display: table-row;
+    flex: none;
     white-space: nowrap;
     text-overflow: clip;
 }
 
 #notesList {
-    display: table;
-    table-layout: fixed;
-    width: 100%;
-    overflow: hidden;
+    flex: auto;
+    overflow: scroll;
 }
 .noteItem {
-    display: table-row;
+    display: flex;
 }
 
     .noteItem .dataDiv {
-        display: table-cell;
-        width: 100%;
+        flex: auto;
         padding: 10px 0px;
     }
 
     .noteItem .paddingDivLeft, .noteItem .paddingDivRight {
-        display: table-cell;
-        width: 15px;
+        flex-basis: 15px;
     }
 
         .noteItem .paddingDivLeft:hover {
             background-color: green;
         }
 
-        .noteItem .titleWrapper {
-            overflow: hidden;
-            position: relative;
+    .noteItem .titleWrapper {
+        overflow: hidden;
+        position: relative;
+    }
+
+        .noteItem .titleWrapper .hidden {
+            display: none;
         }
 
-            .noteItem .titleWrapper .hidden {
-                display: none;
-            }
+    .noteItem .checkboxDiv {
+        display: block;
+        position: absolute;
+        margin-top: 10px;
+    }
 
-        .noteItem .checkboxDiv {
-            display: block;
-            position: absolute;
-            margin-top: 10px;
+    .noteItem .titleWrapper div {
+        width: 100%;
+    }
+
+        .noteItem .moveRight {
+            margin-left: 30px;
         }
 
-        .noteItem .titleWrapper div {
-            width: 100%;
-        }
+    .noteItem .dataDiv .titleDiv {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        font-size: 22px;
+        white-space: nowrap;
+        transition: margin 0.2s;
+    }
 
-            .noteItem .moveRight {
-                margin-left: 30px;
-            }
-
-        .noteItem .dataDiv .titleDiv {
-            text-overflow: ellipsis;
-            overflow: hidden;
-            font-size: 22px;
-            white-space: nowrap;
-            transition: margin 0.2s;
-        }
-
-        .noteItem .dataDiv .contentDiv {
-            font-size: 14px;
-            color: #9e9e9e;
-            transition: margin 0.2s;
-        }
+    .noteItem .dataDiv .contentDiv {
+        font-size: 14px;
+        color: #9e9e9e;
+        transition: margin 0.2s;
+    }
 
     .noteItem .dateCreated {
+        flex-basis: 50px;
         text-align: right;
-        display: table-cell;
-        width: 50px;
     }
 
 .newQuickNote {
-    position: fixed;
-    bottom: 48px;
-    margin-bottom: 4px;
-    display: table-row;
-    width: 100%;
+    flex: none;
 }
 
     .newQuickNote .quickNoteTitle{
@@ -163,82 +239,6 @@ h1,h3,h4 {
 
     .newQuickNote input[type=button]:hover {
         background-color: gray;
-    }
-
-.ApplicationBar {
-    display: table;
-    background-color: #1f1f1f;
-    width: 100%;
-    height: 48px;
-    position: fixed;
-    bottom: 0;
-    text-align: center;
-}
-
-.ApplicationBar .iconsWrapper {
-    display: table-row;
-    vertical-align: middle;
-    height: 48px;
-}
-
-.ApplicationBar .icons {
-    display: table-cell;
-    vertical-align: middle;
-}
-
-.ApplicationBar .icons input[type=button] {
-    font-family: "Font-Awesome Regular";
-    height: 33px;
-    width: 33px;
-    border-radius: 50%;
-    background-color: #1f1f1f;
-    color: white;
-    border: 2px solid white;
-    font-size: 18px;
-    text-align: center;
-    margin: 0px 15px;
-}
-
-.ApplicationBar .icons input[type=button]:hover {
-    background-color: #3f3f3f;
-}
-
-.ApplicationBar .hidden {
-    display: none;
-}
-
-.ApplicationBar .icons .disabled {
-    color: gray !important; 
-    border-color: gray !important;
-}
-
-.ApplicationBar .barMenu {
-    font-family: "Open-Sans Light";
-    font-size: 22px;
-    text-align: left;
-    max-height: 250px;
-    overflow: scroll;
-    transition: max-height 0.2s ease;
-}
-    .ApplicationBar .barMenu div {
-        margin: 10px 15px;
-    }
-
-    .ApplicationBar .closed {
-        max-height: 0px;
-    }
-
-.barMenuIcon {
-    position: absolute;
-    height: 42px;
-    top: 6px;
-    right: 12px;
-    font-family: 'Font-Awesome Solid';
-    font-size: 4px;
-}
-
-    .barMenuIcon span {
-        margin: 0px 2px;
     }
 
 #logArea {

@@ -17,40 +17,47 @@
   </head>
   <body>
     <div class="pageWrapper">
-      <div class="pageTitles"><h4>Note24</h4></div>
-      <div class="pageTitles"><h1>quick view <span style="color: rgb(83, 83, 83);">advanced</span></h1></div>
-      <div id="notesList"><div style="margin: 0px 10px;">No notes yet</div></div>
-      <div class="pageFiller"/>
-  
-      <div class="newQuickNote">
-        <div class="quickNoteTitle"><input id="noteTitle" placeholder="Type note..." type="text" value="" autocomplete="off"/></div>
-        <div class="quickNoteAdd"><input type="button" value="Add Note" onclick="addNoteToDatabase()"/></div>
-      </div>
-    </div>
-    <div class="ApplicationBar">
-      <div class="barMenuIcon" onclick="barMenuIconClicked()">
-        <span>&#xf111;</span><span>&#xf111;</span><span>&#xf111;</span>
-      </div>
-      <div class="iconsWrapper">
-        <div class="icons">
-          <input type="button" id="checkButton" value="&#xf14a;" onclick="showCheckboxes(null)"/>
-          <input type="button" id="checkDeleteButton" class="hidden" value="&#xf2ed;" onclick="checkDeleteButtonPressed()"/>
-          <input type="button" id="checkClipboardButton" class="hidden" value="&#xf328;" onclick="checkBoxClipboardClicked()"/>
+      <!--Page-->
+      <div class="pageContent">
+        <div class="content">
+          <div class="pageTitles"><h4>Note24</h4></div>
           
-          <!--
-          <input type="button" id="addNoteButton" value="&#x2b;"/>
-          <input type="button" value="&#xf005;"/>
-          <input type="button" value="&#xf004;"/>
-          <input type="button" value="&#xf14d;"/>
-          -->
+          <div class="pageTitles"><h1>quick view <span style="color: rgb(83, 83, 83);">advanced</span></h1></div>
+          
+          <div id="notesList">
+            <div style="margin: 0px 10px;">No notes yet</div>
+          </div>
+      
+          <div class="newQuickNote">
+            <div class="quickNoteTitle"><input id="noteTitle" placeholder="Type note..." type="text" value="" autocomplete="off"/></div>
+            <div class="quickNoteAdd"><input type="button" value="Add Note" onclick="addNoteToDatabase()"/></div>
+          </div>
         </div>
       </div>
-      <div class="barMenu closed">
-        <div>Settings</div>
-        <div>About</div>
-        <div>Log</div>
-        <textarea id="logArea"></textarea>
+      <div class="applicationBar">
+        <div class="barMenuIcon" onclick="barMenuIconClicked()">
+          <span>&#xf111;</span><span>&#xf111;</span><span>&#xf111;</span>
+        </div>
+          <div class="icons">
+            <input type="button" id="checkButton" value="&#xf14a;" onclick="showCheckboxes(null)"/>
+            <input type="button" id="checkDeleteButton" class="hidden" value="&#xf2ed;" onclick="checkDeleteButtonPressed()"/>
+            <input type="button" id="checkClipboardButton" class="hidden" value="&#xf328;" onclick="checkBoxClipboardClicked()"/>
+            
+            <!--
+            <input type="button" id="addNoteButton" value="&#x2b;"/>
+            <input type="button" value="&#xf005;"/>
+            <input type="button" value="&#xf004;"/>
+            <input type="button" value="&#xf14d;"/>
+            -->
+        </div>
+        <div class="barMenu closed">
+          <div>Settings</div>
+          <div>About</div>
+          <div>Log</div>
+          <textarea id="logArea"></textarea>
+        </div>
       </div>
+      <!--Page-->
     </div>
 
 
