@@ -65,22 +65,23 @@
     <script src="data.js"></script>
     <div id="noteitem" class="noteItem" style="display: none;">
       <input type="hidden" value="${dBkey}" />
-      <div class="paddingDivLeft" onclick="showCheckboxes(this)"></div>
       
-      <div class="dataDiv">
-        <div class="titleWrapper">
-          <input type="checkbox" class="checkboxDiv hidden" onclick="checkBoxClicked()" />
-          <div class="titleDiv" onclick="clickedOnNote(this)">
-            ${title}
-          </div>
-          <div class="contentDiv" onclick="clickedOnNote(this)">
-            ${content}
-          </div>
+      <div class="selectDiv selectionEnabled" onclick="showCheckboxes(this)"></div>
+
+      <div class="titleWrapper">
+        <input type="checkbox" class="checkboxDiv hidden" onclick="checkBoxClicked()" />
+        <div class="titleDiv" onclick="clickedOnNote(this)">
+          ${title}
+        </div>
+        <div class="contentDiv" onclick="clickedOnNote(this)">
+          ${content}
         </div>
       </div>
-      <div class="dateCreated" onclick="clickedOnNote(this)">
+      
+      <div class="noteDate" onclick="clickedOnNote(this)">
         ${dateCreated}
       </div>
+      
       <div class="paddingDivRight"></div>
     </div>
   </body>

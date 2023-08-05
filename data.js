@@ -106,7 +106,7 @@ function getAllNotes(db) {
     request.onerror = function(event) {
         logArea.innerHTML += "Note list FAILED\n";
     };
-    notes = [];
+    var notes = [];
     request.onsuccess = function(event) {
         let cursor = event.target.result;
         if (cursor) {
@@ -180,20 +180,28 @@ function showCheckboxes(preSelect) {
     //Pre select the checkbox when available
     if (preSelect != null)
     {
-        preSelect.parentElement.children[2].children[0].children[0].checked = true;
+        var toCheck = preSelect.parentElement.children[2].children[0];
+        if (toCheck.classList.contains("hidden"))
+        {
+            toCheck.checked = true;
+        }
+        else { return; }
     }
 
     //Get all notes on the screen
-    notes = document.getElementById("notesList").children;
+    var notes = document.getElementById("notesList").children;
     
     for(i = 0; i < notes.length; i++) {
 
         //Make space for checkboxes by moving note data to right
-        var titleWrapper = notes[i].children[2].children[0];
+        var titleWrapper = notes[i].children[2];
+
         if (!titleWrapper.children[1].classList.contains("moveRight")){
-            titleWrapper.children[0].classList.remove("hidden"); //CheckBox
-            titleWrapper.children[1].classList.add("moveRight"); //titleDiv
-            titleWrapper.children[2].classList.add("moveRight"); //contentDiv
+            titleWrapper.children[0].classList.remove("hidden"); //Checkbox
+            titleWrapper.children[1].classList.add("moveRight"); //Note Title
+            titleWrapper.children[2].classList.add("moveRight"); //Note Content
+
+            notes[i].children[1].classList.remove("selectionEnabled"); 
 
             document.getElementById("checkDeleteButton").classList.remove("hidden");
             document.getElementById("checkClipboardButton").classList.remove("hidden");
@@ -203,16 +211,20 @@ function showCheckboxes(preSelect) {
                 document.getElementById("checkClipboardButton").classList.add("disabled");
             }
         }
-        else{
-            titleWrapper.children[0].classList.add("hidden"); //CheckBox
-            titleWrapper.children[1].classList.remove("moveRight"); //titleDiv
-            titleWrapper.children[2].classList.remove("moveRight"); //contentDiv
+        else {
+            titleWrapper.children[0].classList.add("hidden");
+            titleWrapper.children[1].classList.remove("moveRight");
+            titleWrapper.children[2].classList.remove("moveRight");
+
+            notes[i].children[1].classList.add("selectionEnabled");
+
+            //Disable all checkboxes
+            titleWrapper.children[0].checked = false;
 
             document.getElementById("checkDeleteButton").classList.add("hidden");
             document.getElementById("checkClipboardButton").classList.add("hidden");
         }
     }
-
     //TODO: Add code to preselect a checkbox
 }
 
@@ -220,11 +232,11 @@ function checkDeleteButtonPressed() {
     //TODO: Add code to ask for permission
     if (!document.getElementById("checkDeleteButton").classList.contains("disabled"))
     {
-        notes = document.getElementById("notesList").children;
+        var notes = document.getElementById("notesList").children;
         var notesToDelete = [];
         
         for(i = 0; i < notes.length; i++) {
-            var noteCheckbox = notes[i].children[2].children[0].children[0];
+            var noteCheckbox = notes[i].children[2].children[0];
             if (noteCheckbox.checked){
                 //alert("will remove:" + notes[i].children[0].value);
                 notesToDelete.push(parseInt(notes[i].children[0].value));
@@ -243,18 +255,38 @@ function showNote(note) {
 function clickedOnNote(toOpen) {
     var noteitem = toOpen.parentElement;
     //Find note main div
-    if (!noteitem.classList.contains("noteItem")) { noteitem = noteitem.parentElement.parentElement; }
+    if (!noteitem.classList.contains("noteItem")) { noteitem = noteitem.parentElement; }
     
+    //Checkbox toggle if checking allowed
+    var notes = document.getElementById("notesList").children;
+    if (!notes[0].children[2].children[0].classList.contains("hidden"))
+    {
+        var noteCheckbox = noteitem.children[2].children[0];
+        checkBoxClicked(noteCheckbox);
+        return;
+    }
     var noteId = [ noteitem.children[0].value ];
 
     getNoteArray(noteId, showNote);
 }
 
-function checkBoxClicked() {
+function checkBoxClicked(chk) {
+    // Check if function is called from clicking on a note
+    if (chk != null)
+    {
+        chk.checked = !chk.checked;
+    }
     document.getElementById("checkDeleteButton").classList.remove("disabled");
     document.getElementById("checkClipboardButton").classList.remove("disabled");
     
-    //add function to disable it again when no notes are selected
+    //Function to hide checkboxes again when no notes are selected
+    var notes = document.getElementById("notesList").children;
+    var aNoteisChecked = false;
+    for (i = 0; i < notes.length; i++)
+    {
+        if (notes[i].children[2].children[0].checked) { aNoteisChecked = true; }
+    }
+    if (!aNoteisChecked) { showCheckboxes(null); }
 }
 
 async function copyToClipboard(toCopy)

@@ -115,7 +115,7 @@ h1,h3,h4 {
     display: table;
     height: 42px;
     padding-top: 6px;
-    margin-right: 12px;
+    padding-right: 12px;
     margin-left: auto;
     margin-bottom: -48px;
     font-family: 'Font-Awesome Solid';
@@ -126,9 +126,9 @@ h1,h3,h4 {
         margin: 0px 2px;
     }
 
-/*
+/* ////////////////////////////////////
 QUICK VIEW STYLE
-*/
+/////////////////////////////////////// */
 
 .content {
     display: flex;
@@ -148,61 +148,64 @@ QUICK VIEW STYLE
 }
 .noteItem {
     display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
 }
 
-    .noteItem .dataDiv {
-        flex: auto;
-        padding: 10px 0px;
+    .noteItem .selectDiv, .noteItem .paddingDivRight {
+        min-width: 15px;
     }
 
-    .noteItem .paddingDivLeft, .noteItem .paddingDivRight {
-        flex-basis: 15px;
+    .noteItem .selectionEnabled:hover {
+        background-color: green;
     }
-
-        .noteItem .paddingDivLeft:hover {
-            background-color: green;
-        }
 
     .noteItem .titleWrapper {
+        flex: auto;
+        padding: 10px 0px;
         overflow: hidden;
-        position: relative;
     }
 
-        .noteItem .titleWrapper .hidden {
-            display: none;
+        .noteItem .checkboxDiv {
+            display: block;
+            opacity: 1;
+            margin-bottom: -17px;
+            transition: opacity 0.5s;
+        }
+        .noteItem .titleWrapper div {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            width: 100%;
         }
 
-    .noteItem .checkboxDiv {
-        display: block;
-        position: absolute;
-        margin-top: 10px;
-    }
+        .noteItem .titleWrapper .titleDiv {
+            font-size: 22px;
+            transition: margin 0.2s;
+        }
 
-    .noteItem .titleWrapper div {
-        width: 100%;
-    }
+        .noteItem .titleWrapper .contentDiv {
+            font-size: 14px;
+            color: #9e9e9e;
+            transition: margin 0.2s;
+        }
 
         .noteItem .moveRight {
-            margin-left: 30px;
+            margin-left: 50px;
         }
 
-    .noteItem .dataDiv .titleDiv {
-        text-overflow: ellipsis;
-        overflow: hidden;
-        font-size: 22px;
-        white-space: nowrap;
-        transition: margin 0.2s;
-    }
+        .noteItem .hidden {
+            opacity: 0;
+            visibility: collapse;
+        }
 
-    .noteItem .dataDiv .contentDiv {
-        font-size: 14px;
-        color: #9e9e9e;
-        transition: margin 0.2s;
-    }
-
-    .noteItem .dateCreated {
+    .noteItem .noteDate {
         flex-basis: 50px;
         text-align: right;
+    }
+    
+    .noteItem .paddingDivRight {
+        flex-basis: 15px;
     }
 
 .newQuickNote {
