@@ -52,7 +52,7 @@ h1,h3,h4 {
 
 .pageContent {
     flex: auto;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 
 .applicationBar {
@@ -100,7 +100,7 @@ h1,h3,h4 {
     font-size: 22px;
     text-align: left;
     max-height: 250px;
-    overflow: scroll;
+    overflow-y: scroll;
     transition: max-height 0.2s ease;
 }
     .applicationBar .barMenu div {
@@ -144,7 +144,7 @@ QUICK VIEW STYLE
 
 #notesList {
     flex: auto;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 .noteItem {
     display: flex;
