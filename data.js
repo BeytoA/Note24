@@ -25,7 +25,7 @@ function loaded() {
     idbRequest.onupgradeneeded = function (event) {
         logArea.innerHTML += "Database will be upgraded\n";
 
-        const existingObjectStores = event.target.transaction.objectStore("notes");
+        var existingObjectStores;
         const bufferDB = event.target.result;
         var objectStore;
         if (!bufferDB.objectStoreNames.contains("notes"))
@@ -37,22 +37,26 @@ function loaded() {
             objectStore.createIndex("dateCreated", "dateCreated", { unique: false });
             objectStore.createIndex("dateLastModified", "dateLastModified", { unique: false });
         }
-        else if (existingObjectStores.indexNames)
+        else
         {
-            var indexToAddArray = [ "title", "content", "dateCreated", "dateLastModified" ];
-            var indexExistingArray = existingObjectStores.indexNames;
+            existingObjectStores = event.target.transaction.objectStore("notes");
+            if (existingObjectStores.indexNames)
+            {
+                var indexToAddArray = [ "title", "content", "dateCreated", "dateLastModified" ];
+                var indexExistingArray = existingObjectStores.indexNames;
 
-            indexToAddArray.forEach(function(indexes) {
-                if (indexExistingArray.contains(indexes))
-                {
-                    logArea.innerHTML += "Index create attempt: " + indexes + " already exists\n";
-                }
-                else
-                {
-                    objectStore.createIndex(indexes, indexes, { unique: false });
-                    logArea.innerHTML += "Index create attempt: " + indexes + " created\n";
-                }
-            });
+                indexToAddArray.forEach(function(indexes) {
+                    if (indexExistingArray.contains(indexes))
+                    {
+                        logArea.innerHTML += "Index create attempt: " + indexes + " already exists\n";
+                    }
+                    else
+                    {
+                        objectStore.createIndex(indexes, indexes, { unique: false });
+                        logArea.innerHTML += "Index create attempt: " + indexes + " created\n";
+                    }
+                });
+            }
             //Delete all notes
             //bufferDB.deleteObjectStore("notes");
 
