@@ -1,7 +1,7 @@
 function backToNoteListClicked(e) {
     //alert("Clicked");
     e.preventDefault();
-    window.location.href = window.location.pathname.split("views")[0] + "index.html";
+    window.location.href = window.location.toString().split("views")[0] + "index.html";
 }
 
 /*function loadThis() {
