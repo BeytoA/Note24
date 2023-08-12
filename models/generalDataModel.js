@@ -250,7 +250,7 @@ function checkBoxClicked(chk) {
 
 function showNote(note) {
     //console.log(note[0]);
-    window.location.href = "/views/notePage.html?noteId=" + note[0].dBkey;
+    window.location.href = window.location.pathname + "views/notePage.html?noteId=" + note[0].dBkey;
 }
 
 function clickedOnNote(toOpen) {
