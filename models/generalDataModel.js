@@ -86,13 +86,16 @@ function updateUInotesList(notes) {
     {
         notes.forEach(function(note) {
             let dateSplit = note.dateCreated.split(" ")[0].split("-");
+            var noteContent = note.content.replace(/(<([^>]+)>)/gi, " ");
+            if(noteContent.length > 80) { noteContent = noteContent.substring(0,80); }
+            if (noteContent.length < 1) { noteContent = "(no content)"; }
             
             const noteitem = document.getElementById("noteitem");
             let itemDivInner = noteitem.innerHTML;
             itemDivInner = itemDivInner
             .replace(/\${dBkey}/g, note.dBkey)
             .replace(/\${title}/, note.title)
-            .replace(/\${content}/, "(no content)")
+            .replace(/\${content}/, noteContent)
             .replace(/\${dateCreated}/, dateSplit[0] + "-" + dateSplit[1]);
             let itemDiv = document.createElement("div");
             itemDiv.innerHTML = itemDivInner;
@@ -292,11 +295,12 @@ function addNoteToDatabase() {
     const objectStore = transaction.objectStore("notes");
 
     //TODO: Check if date, month, year, hours, minutes and seconds matches correct values, check for +- 1
+    const dateTodayFormatted = todayDate.getDate() + "-" + (todayDate.getMonth() + 1) + "-" + todayDate.getFullYear() + " " + ("0" + (todayDate.getHours())).toString().slice(-2) + ":" + ("0" + (todayDate.getMinutes() + 1)).toString().slice(-2) + ":" + ("0" + (todayDate.getSeconds() + 1)).toString().slice(-2);
     var note = { 
         title: noteTitle.value,
         content: "Note content",
-        dateCreated: todayDate.getDate() + "-" + (todayDate.getMonth() + 1) + "-" + todayDate.getFullYear() + " " + ("0" + (todayDate.getHours())).toString().slice(-2) + ":" + ("0" + (todayDate.getMinutes() + 1)).toString().slice(-2) + ":" + ("0" + (todayDate.getSeconds() + 1)).toString().slice(-2),
-        dateLastModified: ""
+        dateCreated: dateTodayFormatted,
+        dateLastModified: dateTodayFormatted
     };
     note.dateLastModified = note.dateCreated;
 
@@ -418,4 +422,27 @@ function barMenuIconClicked() {
     }
     else { barMenu.classList.add("closed"); }
 }
-//loaded();
+
+function saveNote(noteId, noteData, fn) {
+    const objectStore = note24database
+    .transaction(["notes"], "readwrite")
+    .objectStore("notes");
+
+    const request = objectStore.get(parseInt(noteId));
+
+    request.onsuccess = function() {
+        const noteItem = request.result;
+
+        noteItem.title = noteData.title;
+        noteItem.content = noteData.content;
+        var todayDate = new Date();
+        const dateTodayFormatted = todayDate.getDate() + "-" + (todayDate.getMonth() + 1) + "-" + todayDate.getFullYear() + " " + ("0" + (todayDate.getHours())).toString().slice(-2) + ":" + ("0" + (todayDate.getMinutes() + 1)).toString().slice(-2) + ":" + ("0" + (todayDate.getSeconds() + 1)).toString().slice(-2);
+        noteItem.dateLastModified = dateTodayFormatted;
+
+        const updateRequest = objectStore.put(noteItem, parseInt(noteId));
+
+        updateRequest.onsuccess = function() {
+            alert("Save success!");
+        }
+    }
+}

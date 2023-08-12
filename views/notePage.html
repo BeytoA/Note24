@@ -26,10 +26,10 @@
             <a href="#" id="backToNoteListButton" onclick="backToNoteListClicked(event)">
               &lt; Back to notes list</a>
             <div class="noteHeader">
-              <input id="noteTitle" type="text" value="${noteTitle}" placeholder="Note title..."/>
+              <input id="noteTitleDiv" type="text" value="${noteTitle}" placeholder="Note title..."/>
               <div class="noteInfo">
-                <div id="dateCreated">Note modified date</div>
-                <div class="hidden">Note created date</div>
+                <div id="dateLastModified">Note modified date</div>
+                <div id="dateCreated" class="hidden">Note created date</div>
                 <div>
                   <input type="button" value="More" class="hidden">
                   <input type="button" value="P">
@@ -45,9 +45,9 @@
             <span>&#xf111;</span><span>&#xf111;</span><span>&#xf111;</span>
           </div>
             <div class="icons">
-              <input type="button" id="checkButton" value="&#xf0c7;" onclick="showCheckboxes(null)"/>
+              <input type="button" id="saveNoteButton" value="&#xf0c7;" onclick="saveNoteClicked()"/>
               
-              <input type="button" value="&#xf03e;"/>
+              <input type="button" class="hidden" value="&#xf03e;"/>
               <!--
               <input type="button" id="addNoteButton" value="&#x2b;"/>
               <input type="button" value="&#xf005;"/>
@@ -70,23 +70,31 @@
     
     TODO: Sometimes functions are not called when the page is loaded-->
     <script>
+      var noteId = "";
+      var noteTitleInput = document.createElement("input");
+      var noteContent = document.createElement("div");
+
       function fillNotePage2(noteData) {
-          var noteTitleInput = document.getElementById("noteTitle");
-          noteTitleInput.value = noteData[0].title;
+        noteTitleInput = document.getElementById("noteTitleDiv");
+        noteTitleInput.value = noteData[0].title;
 
-          var noteContent = document.getElementById("noteContent");
-          noteContent.innerHTML = noteData[0].content;
+        noteContent = document.getElementById("noteContent");
+        noteContent.innerHTML = noteData[0].content;
 
-          var noteDateCreatedDiv = document.getElementById("dateCreated");
-          noteDateCreatedDiv.innerHTML = noteData[0].dateCreated;
+        noteDateCreatedDiv = document.getElementById("dateLastModified");
+        noteDateCreatedDiv.innerHTML = noteData[0].dateLastModified;
       }
-    </script>
-    <script>
-    loaded(function()
-      { 
+      function testalert(da) {
+        alert(da.title);
+      }
+      function saveNoteClicked() {
+        var noteData = { title: noteTitleInput.value, content: noteContent.innerHTML};
+        saveNote(noteId, noteData, testalert);
+      }
+      loaded(function() { 
         //Get noteId from the URL
         var allQueryParameters = document.location.search;
-        var noteId = allQueryParameters.split("noteId=")[1].toString();
+        noteId = allQueryParameters.split("noteId=")[1].toString();
 
         //Check if there are multiple parameters in the URL
         if (noteId.indexOf("&") > -1)
@@ -98,6 +106,8 @@
         var noteIds = [ noteId ]
         getNoteArray(noteIds, fillNotePage2);
       });
+    </script>
+    <script>
     </script>
     <script src="../controllers/notePageController.js"></script>
   </body>
