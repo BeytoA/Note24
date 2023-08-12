@@ -1,9 +1,10 @@
 const idbRequest = window.indexedDB.open("note24database", 3);
 var note24database = IDBDatabase;
-var logArea = document.getElementById("logArea");
+var logArea = document.createElement("textarea");
 var scrollToBottom = false;
 
-function loaded() {
+function loaded(extraFunction) {
+    logArea = document.getElementById("logArea");
     logArea.innerHTML += "";
 
     idbRequest.onerror = function (event) {
@@ -19,8 +20,12 @@ function loaded() {
                 logArea.innerHTML += "Database: Error " + event.target.error + "\n";
             }
         }
-
-        getAllNotes(note24database);
+        try {
+            extraFunction();
+        }
+        catch (error) {
+            alert(error);
+        }
     }
     idbRequest.onupgradeneeded = function (event) {
         logArea.innerHTML += "Database will be upgraded\n";
@@ -100,7 +105,8 @@ function updateUInotesList(notes) {
 }
 
 var notesList = document.createElement("div");
-function getAllNotes(db) {
+function getAllNotes() {
+    var db = note24database;
 
     //List all notes
     notesList = document.getElementById("notesList");
@@ -158,7 +164,12 @@ function getNoteArray(noteIdArray, fn) {
                 if (cursor){
                     logArea.innerHTML += "Getting a single note SUCCESS\n";
                     logArea.scrollTop = logArea.scrollHeight;
-                    responseArray.push(cursor.value);
+
+                    //Add key ID to the record
+                    let key = cursor.primaryKey;
+                    let value = cursor.value;
+                    value.dBkey = key;
+                    responseArray.push(value);
                     cursor.continue();
                 }
                 else { fn(responseArray); }
@@ -238,7 +249,8 @@ function checkBoxClicked(chk) {
 }
 
 function showNote(note) {
-    alert(note[0].title);
+    //console.log(note[0]);
+    window.location.href = "/views/notePage.html?noteId=" + note[0].dBkey;
 }
 
 function clickedOnNote(toOpen) {
@@ -275,6 +287,8 @@ function addNoteToDatabase() {
     };
     
     const objectStore = transaction.objectStore("notes");
+
+    //TODO: Check if date, month, year, hours, minutes and seconds matches correct values, check for +- 1
     var note = { 
         title: noteTitle.value,
         content: "Note content",
@@ -387,6 +401,18 @@ function checkBoxClipboardClicked() {
 document.addEventListener("keypress", function(event) {
     let keyCode = event.keyCode ? event.keyCode : event.which;
 
-    if (keyCode == 13) { addNoteToDatabase(); }
+    // TODO: Prevent adding a note twice when pressed enter
+    if (keyCode == 13 && document.getElementById("noteTitle") == document.activeElement) { addNoteToDatabase(); }
 });
-loaded();
+
+
+function barMenuIconClicked() {
+    var barMenu = document.getElementsByClassName("barMenu")[0];
+
+    if (barMenu.classList.contains("closed"))
+    {
+        barMenu.classList.remove("closed");
+    }
+    else { barMenu.classList.add("closed"); }
+}
+//loaded();

@@ -1,19 +1,9 @@
 <!DOCTYPE html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index Page</title>
-    <link rel="stylesheet" href="defaultStyle.css">
-    <script>
-      function barMenuIconClicked() {
-          var barMenu = document.getElementsByClassName("barMenu")[0];
-      
-          if (barMenu.classList.contains("closed"))
-          {
-              barMenu.classList.remove("closed");
-          }
-          else { barMenu.classList.add("closed"); }
-      }
-    </script>
+    <title>Note24 - List</title>
+    <link rel="stylesheet" href="views/defaultStyle.css">
+    <script src="models/generalDataModel.js"></script>
   </head>
   <body>
     <div class="pageWrapper">
@@ -39,7 +29,7 @@
         <div class="barMenuIcon" onclick="barMenuIconClicked()">
           <span>&#xf111;</span><span>&#xf111;</span><span>&#xf111;</span>
         </div>
-          <div class="icons">
+        <div class="icons">
             <input type="button" id="checkButton" value="&#xf14a;" onclick="showCheckboxes(null)"/>
             <input type="button" id="checkDeleteButton" class="hidden" value="&#xf2ed;" onclick="checkDeleteButtonPressed()"/>
             <input type="button" id="checkClipboardButton" class="hidden" value="&#xf328;" onclick="checkBoxClipboardClicked()"/>
@@ -62,7 +52,7 @@
 
 
     <!--Workbench and Templates-->
-    <script src="data.js"></script>
+    <script>loaded(getAllNotes);</script>
     <div style="width: 0px; height: 0px; overflow: hidden;"><textarea id="toCopyClipboard"></textarea></div>
     <div id="noteitem" class="noteItem" style="display: none;">
       <input type="hidden" value="${dBkey}" />

@@ -1,0 +1,37 @@
+#backToNoteListButton {
+    display: block;
+    color: rgb(255, 0, 255);
+}
+
+/* padding: top right bottom left; */
+
+.noteInfo {
+    margin: 0px 10px 0px 10px;
+    border-top: 2px solid white;
+}
+
+.noteHeader input[type=text] {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px 10px 5px 10px;
+    background-color: black;
+    color: white;
+    font-size: 22px;
+}
+    .noteHeader input[type=text]:focus {
+        outline: none;
+        border: none;
+        color: white;
+    }
+    .noteHeader input[type=text]:hover {
+        color: lightgray;
+    }
+
+.noteInfo .hidden {
+    display: none;
+}
+
+#noteContent {
+    padding: 10px;
+}

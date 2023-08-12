@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note24 - Note</title>
+    <link rel="stylesheet" href="defaultStyle.css">
+    <script src="../models/generalDataModel.js"></script>
+  </head>
+  <body>
+    <div class="pageWrapper">
+        <!--Page-->
+        <!--
+        TODO: Start with every function which are needed
+        for this page to work properly
+      
+        Put a function event on loaded() function which will
+        execute when the page is loaded
+        Every page will have their own onloaded function
+        They will all call loaded like loaded(pageLoaded)
+        
+        TODO: Create note folders, support drag&drop a note
+        from a folder to another
+        -->
+        <div class="pageContent">
+          <link rel="stylesheet" href="notePageStyle.css">
+          <div class="content">
+            <a href="#" id="backToNoteListButton" onclick="backToNoteListClicked(event)">
+              &lt; Back to notes list</a>
+            <div class="noteHeader">
+              <input id="noteTitle" type="text" value="${noteTitle}" placeholder="Note title..."/>
+              <div class="noteInfo">
+                <div id="dateCreated">Note modified date</div>
+                <div class="hidden">Note created date</div>
+                <div>
+                  <input type="button" value="More" class="hidden">
+                  <input type="button" value="P">
+                </div>
+              </div>
+            </div>
+            <div id="noteContent" contentEditable="true">${noteContent}</div>
+          </div>
+        </div>
+        <!--Page-->
+        <div class="applicationBar">
+          <div class="barMenuIcon" onclick="barMenuIconClicked()">
+            <span>&#xf111;</span><span>&#xf111;</span><span>&#xf111;</span>
+          </div>
+            <div class="icons">
+              <input type="button" id="checkButton" value="&#xf0c7;" onclick="showCheckboxes(null)"/>
+              
+              <input type="button" value="&#xf03e;"/>
+              <!--
+              <input type="button" id="addNoteButton" value="&#x2b;"/>
+              <input type="button" value="&#xf005;"/>
+              <input type="button" value="&#xf004;"/>
+              <input type="button" value="&#xf14d;"/>
+              -->
+          </div>
+          <div class="barMenu closed">
+            <div>Settings</div>
+            <div>About</div>
+            <div>Log</div>
+            <textarea id="logArea"></textarea>
+          </div>
+        </div>
+    </div>
+
+    <!--Workbench and Templates-->
+
+    <!-- TODO: Implement these in a script file
+    
+    TODO: Sometimes functions are not called when the page is loaded-->
+    <script>
+      function fillNotePage2(noteData) {
+          var noteTitleInput = document.getElementById("noteTitle");
+          noteTitleInput.value = noteData[0].title;
+
+          var noteContent = document.getElementById("noteContent");
+          noteContent.innerHTML = noteData[0].content;
+
+          var noteDateCreatedDiv = document.getElementById("dateCreated");
+          noteDateCreatedDiv.innerHTML = noteData[0].dateCreated;
+      }
+    </script>
+    <script>
+    loaded(function()
+      { 
+        //Get noteId from the URL
+        var allQueryParameters = document.location.search;
+        var noteId = allQueryParameters.split("noteId=")[1].toString();
+
+        //Check if there are multiple parameters in the URL
+        if (noteId.indexOf("&") > -1)
+        {
+            noteId = noteId.split("&")[0];
+        }
+
+        //Fill note page
+        var noteIds = [ noteId ]
+        getNoteArray(noteIds, fillNotePage2);
+      });
+    </script>
+    <script src="../controllers/notePageController.js"></script>
+  </body>
+</html>
