@@ -250,7 +250,10 @@ function checkBoxClicked(chk) {
 
 function showNote(note) {
     //console.log(note[0]);
-    window.location.href = window.location.pathname + "views/notePage.html?noteId=" + note[0].dBkey;
+    // TODO: Fix navigation issue with window.location.pathname
+    var pathnm = window.location.pathname;
+    if (pathnm.indexOf("index.html") > -1) { pathnm = pathnm.split("index.html")[0]; }
+    window.location.href = pathnm + "views/notePage.html?noteId=" + note[0].dBkey;
 }
 
 function clickedOnNote(toOpen) {
