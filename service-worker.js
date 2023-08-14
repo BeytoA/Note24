@@ -1,4 +1,4 @@
-const cacheName = "note24-cache-1";
+const cacheName = "note24-cache-2";
 const staticAssets = [
     "./",
     "./index.html",
@@ -6,7 +6,7 @@ const staticAssets = [
     "./views/defaultStyle.css",
     "./views/fa-regular-400.ttf",
     "./views/fa-solid-900.ttf",
-    "./views/notePage.html",
+    new Request("./views/notePage.html"),
     "./views/notePageStyle.css",
     "./views/OpenSans-Light.ttf",
     "./views/OpenSans-Regular.ttf",
