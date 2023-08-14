@@ -428,6 +428,11 @@ function saveNote(noteId, noteData, fn) {
     .transaction(["notes"], "readwrite")
     .objectStore("notes");
 
+    if (noteId == "")
+    {
+        logArea.innerHTML += "Note to save does not have an ID\n";
+        return;
+    }
     const request = objectStore.get(parseInt(noteId));
 
     request.onsuccess = function() {
@@ -442,7 +447,12 @@ function saveNote(noteId, noteData, fn) {
         const updateRequest = objectStore.put(noteItem, parseInt(noteId));
 
         updateRequest.onsuccess = function() {
-            alert("Save success!");
+            logArea.innerHTML += "Note save SUCCESS\n";
+            fn();
+        }
+        updateRequest.onerror = function() {
+            logArea.innerHTML += "Note save ERROR\n";
+            fn();
         }
     }
 }

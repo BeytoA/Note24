@@ -84,17 +84,24 @@
         noteDateCreatedDiv = document.getElementById("dateLastModified");
         noteDateCreatedDiv.innerHTML = noteData[0].dateLastModified;
       }
-      function testalert(da) {
-        alert(da.title);
+      function saveNoteClicked2() {
+        alert("Save success!");
       }
       function saveNoteClicked() {
+        try {
+
+        } catch (error) { alert(error); }
         var noteData = { title: noteTitleInput.value, content: noteContent.innerHTML};
-        saveNote(noteId, noteData, testalert);
+        saveNote(noteId, noteData, saveNoteClicked2);
       }
       loaded(function() { 
         //Get noteId from the URL
-        var allQueryParameters = document.location.search;
-        noteId = allQueryParameters.split("noteId=")[1].toString();
+        var allQueryParameters = "";
+        noteId = "";
+        if (document.location.search) {
+          allQueryParameters = document.location.search;
+          noteId = allQueryParameters.split("noteId=")[1].toString();
+        }
 
         //Check if there are multiple parameters in the URL
         if (noteId.indexOf("&") > -1)
@@ -103,9 +110,30 @@
         }
 
         //Fill note page
-        var noteIds = [ noteId ]
-        getNoteArray(noteIds, fillNotePage2);
+        if (noteId.length > 0)
+        {
+          var noteIds = [ noteId ]
+          getNoteArray(noteIds, fillNotePage2);
+        }
+        else {
+          backToNoteListClicked(null);
+        }
       });
+    </script>
+    <script async="async">
+      async function startServiceWorker() {
+          if ('serviceWorker' in navigator) {
+              const registration = await navigator.serviceWorker.register("./service-worker.js");
+              if (registration.installing) {
+                  console.log("Service worker installing");
+              } else if (registration.waiting) {
+                  console.log("Service worker installed");
+              } else if (registration.active) {
+                  console.log("Service worker active");
+              }
+          }
+      }
+      startServiceWorker();
     </script>
     <script>
     </script>

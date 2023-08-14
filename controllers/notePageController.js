@@ -1,6 +1,8 @@
 function backToNoteListClicked(e) {
     //alert("Clicked");
-    e.preventDefault();
+    if (e) {
+        e.preventDefault();
+    }
     window.location.href = window.location.toString().split("views")[0] + "index.html";
 }
 

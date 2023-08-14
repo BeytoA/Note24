@@ -4,6 +4,7 @@
     <title>Note24 - List</title>
     <link rel="stylesheet" href="views/defaultStyle.css">
     <script src="models/generalDataModel.js"></script>
+    <link rel="manifest" href="manifest.json">
   </head>
   <body>
     <div class="pageWrapper">
@@ -53,6 +54,21 @@
 
     <!--Workbench and Templates-->
     <script>loaded(getAllNotes);</script>
+    <script async="async">
+      async function startServiceWorker() {
+          if ('serviceWorker' in navigator) {
+              const registration = await navigator.serviceWorker.register("./service-worker.js");
+              if (registration.installing) {
+                  logArea.innerHTML += "Service worker installing\n";
+              } else if (registration.waiting) {
+                  logArea.innerHTML += "Service worker installed\n";
+              } else if (registration.active) {
+                  logArea.innerHTML += "Service worker active\n";
+              }
+          }
+      }
+      startServiceWorker();
+    </script>
     <div style="width: 0px; height: 0px; overflow: hidden;"><textarea id="toCopyClipboard"></textarea></div>
     <div id="noteitem" class="noteItem" style="display: none;">
       <input type="hidden" value="${dBkey}" />

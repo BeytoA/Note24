@@ -1,0 +1,17 @@
+{
+    "name": "Note24",
+    "short_name": "Note24",
+    "description": "Note taking app",
+    "start_url": "/",
+    "icons": [
+        {
+            "src": "logo256x256.png",
+            "sizes": "256x256",
+            "type" : "image/png",
+            "purpose": "maskable any"
+        }
+    ],
+    "theme_color": "#bdffd3",
+    "display": "fullscreen",
+    "orientation": "portrait"
+}
