@@ -2,7 +2,7 @@
     "name": "Note24",
     "short_name": "Note24",
     "description": "Note taking app",
-    "start_url": "/",
+    "start_url": "/note24/",
     "icons": [
         {
             "src": "logo256x256.png",
