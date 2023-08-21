@@ -103,8 +103,13 @@ function updateUInotesList(notes) {
             notesList.appendChild(itemDiv);
         });
         if (scrollToBottom) { notesList.scrollTop = notesList.scrollHeight; scrollToBottom = false; }
+        var checkButton = document.getElementById("checkButton").classList;
+        if (checkButton.contains("disabled")) { checkButton.remove("disabled"); }
     }
-    else { notesList.innerHTML += "<div>There are no notes yet, press 'Add Note' to make one</div>"; }
+    else {
+        notesList.innerHTML += "<div style=\"margin: 0px 10px;\">There are no notes yet, press 'Add Note' to make one</div>";
+        document.getElementById("checkButton").classList.add("disabled");
+    }
 }
 
 var notesList = document.createElement("div");
