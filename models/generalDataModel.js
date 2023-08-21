@@ -303,7 +303,7 @@ function addNoteToDatabase() {
     const dateTodayFormatted = todayDate.getDate() + "-" + (todayDate.getMonth() + 1) + "-" + todayDate.getFullYear() + " " + ("0" + (todayDate.getHours())).toString().slice(-2) + ":" + ("0" + (todayDate.getMinutes() + 1)).toString().slice(-2) + ":" + ("0" + (todayDate.getSeconds() + 1)).toString().slice(-2);
     var note = { 
         title: noteTitle.value,
-        content: "Note content",
+        content: " ",
         dateCreated: dateTodayFormatted,
         dateLastModified: dateTodayFormatted
     };
